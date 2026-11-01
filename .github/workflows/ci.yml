@@ -1,0 +1,23 @@
+# Her push ve pull request'te: lint, TypeScript kontrolü ve üretim derlemesi
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Lint ve derleme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      # tsc -b && vite build
+      - run: npm run build

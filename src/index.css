@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+/*
+  Davetly tasarım sistemi (Stitch'ten). Renkler Material 3 rol adlarıyla:
+  bg-surface, text-on-surface-variant, bg-secondary ... Yazı boyutları tasarımdaki
+  ölçekle: text-headline-md, text-body-sm, text-label-md ...
+*/
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Newsreader', Georgia, serif;
+
+  --color-primary: #080c12;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1e2229;
+  --color-secondary: #83523d;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ffbda2;
+  --color-secondary-fixed: #ffdbcd;
+  --color-on-secondary-fixed: #331103;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-background: #faf9f7;
+  --color-surface: #faf9f7;
+  --color-surface-bright: #faf9f7;
+  --color-surface-dim: #dadad8;
+  --color-surface-variant: #e3e2e0;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container: #efeeec;
+  --color-surface-container-high: #e9e8e6;
+  --color-surface-container-highest: #e3e2e0;
+  --color-on-surface: #1a1c1b;
+  --color-on-surface-variant: #45474b;
+  --color-outline: #76777c;
+  --color-outline-variant: #c6c6cb;
+
+  --text-display-lg: 56px;
+  --text-display-lg--line-height: 64px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-headline-lg-mobile: 28px;
+  --text-headline-lg-mobile--line-height: 36px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg: 40px;
+  --text-headline-lg--line-height: 48px;
+  --text-headline-lg--letter-spacing: -0.015em;
+  --text-headline-md: 28px;
+  --text-headline-md--line-height: 36px;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-headline-sm--letter-spacing: -0.005em;
+  --text-headline-sm--font-weight: 600;
+  --text-title-md: 16px;
+  --text-title-md--line-height: 24px;
+  --text-title-md--font-weight: 600;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-md: 15px;
+  --text-body-md--line-height: 22px;
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--letter-spacing: 0.01em;
+  --text-label-md: 13px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.06em;
+  --text-label-sm--font-weight: 700;
+
+  --shadow-soft: 0 2px 12px rgba(30, 34, 41, 0.08);
+  --shadow-soft-lg: 0 4px 20px rgba(30, 34, 41, 0.12);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-surface font-sans text-body-md text-on-surface antialiased;
+}
+
+/* Google Material Symbols (index.html'de yükleniyor) */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  line-height: 1;
+  user-select: none;
+}
+.icon-filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Harita: tasarımdaki gibi sakin, düşük doygunluklu zemin */
+.map-muted .leaflet-tile-pane {
+  filter: saturate(0.35) brightness(1.04) contrast(0.95);
+}
+.leaflet-container {
+  font-family: var(--font-sans);
+}
+/* Fiyat pinleri L.divIcon ile çizilir; Leaflet'in varsayılan beyaz kutusunu kaldır */
+.price-pin {
+  background: none;
+  border: none;
+}
