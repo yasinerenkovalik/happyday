@@ -66,7 +66,7 @@ Harita karoları geliştirmede doğrudan OpenStreetMap'ten gelir. OSM'in [kullan
 `Dockerfile` uygulamayı Node 24 ile derler ve nginx ile sunar (`nginx/default.conf`): tek sayfa uygulama yönlendirmesi, `/assets` için uzun süreli önbellek, `index.html` için önbelleksiz, güvenlik başlıkları ve `/health`. API adresi derleme sırasında verilir:
 
 ```bash
-docker build --build-arg VITE_API_URL=https://api.mutlugunum.com.tr -t mutlugunum-web .
+docker build --build-arg VITE_API_URL=https://api.mutlugunum.com -t mutlugunum-web .
 ```
 
 Coolify'da bu değer **Build Variable** olarak girilir. Adım adım kurulum backend reposundaki `docs/yayin-coolify.md` dosyasında.
