@@ -72,7 +72,8 @@ export function RegisterPage() {
     <AuthLayout
       wide
       title="Firmanızı kaydedin"
-      description={<>Mekanlarınızı Davetly'de listeleyin. E-postanızı doğruladıktan sonra mekan ekleyebilirsiniz; mekanlarınız ekibimizin onayından sonra sitede görünür. Zaten hesabınız var mı? <Link to="/giris" className="text-secondary hover:underline">Giriş yapın</Link></>}
+      seoDescription="Düğün, nişan ve davet mekanınızı Mutlu Günüm'de ücretsiz listeleyin; teklif taleplerini doğrudan panelinizden alın."
+      description={<>Mekanlarınızı Mutlu Günüm'de listeleyin. E-postanızı doğruladıktan sonra mekan ekleyebilirsiniz; mekanlarınız ekibimizin onayından sonra sitede görünür. Zaten hesabınız var mı? <Link to="/giris" className="text-secondary hover:underline">Giriş yapın</Link></>}
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         <Section title="Hesap">

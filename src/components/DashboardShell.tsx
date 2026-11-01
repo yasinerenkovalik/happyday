@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { useAuth } from '../auth/useAuth'
+import { SITE_NAME, useSeo } from '../lib/seo'
 import { Icon } from './Icon'
 
 export type ShellNavItem = {
@@ -26,6 +27,7 @@ export function DashboardShell({
 }) {
   const { logout } = useAuth()
   const { pathname } = useLocation()
+  useSeo({ title: `${subtitle} | ${SITE_NAME}`, noindex: true })
   const isActive = (item: ShellNavItem, active: boolean) => active || (!!item.match && item.match.test(pathname))
 
   const linkClass = (on: boolean) =>
@@ -38,7 +40,7 @@ export function DashboardShell({
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col bg-surface-container-lowest p-4 shadow-[1px_0_12px_rgba(30,34,41,0.06)] md:flex">
         <Link to="/" className="mb-1 flex items-center gap-2 px-2">
           <Icon name="diamond" className="text-2xl text-secondary" />
-          <span className="text-headline-sm tracking-tight text-primary">davetly</span>
+          <span className="text-headline-sm tracking-tight text-primary">{SITE_NAME}</span>
         </Link>
         <p className="mb-6 px-2 text-label-sm tracking-widest text-on-surface-variant uppercase">{subtitle}</p>
 
@@ -67,7 +69,7 @@ export function DashboardShell({
           <div className="flex items-center justify-between px-4 py-3">
             <Link to="/" className="flex items-center gap-1.5">
               <Icon name="diamond" className="text-xl text-secondary" />
-              <span className="text-title-md text-primary">davetly</span>
+              <span className="text-title-md text-primary">{SITE_NAME}</span>
             </Link>
             <button type="button" onClick={logout} className="text-label-md text-on-surface-variant">Çıkış</button>
           </div>

@@ -4,6 +4,7 @@ import { useCategories, useCities } from '../api/queries'
 import { useAuth } from '../auth/useAuth'
 import { Icon } from '../components/Icon'
 import { Popover, PopoverOption } from '../components/Popover'
+import { SITE_NAME } from '../lib/seo'
 import { AccountMenu } from './AccountMenu'
 import { categoryIcon } from './categoryIcons'
 import type { ExploreFilters } from './useExploreFilters'
@@ -19,9 +20,9 @@ export function SiteHeader({ filters, onChange }: Props) {
   return (
     <header className="sticky top-0 z-50 w-full bg-surface-bright/90 shadow-[0_1px_12px_rgba(30,34,41,0.06)] backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-5 lg:px-12">
-        <Link to="/" className="flex items-center gap-2" aria-label="Davetly ana sayfa">
+        <Link to="/" className="flex items-center gap-2" aria-label={`${SITE_NAME} ana sayfa`}>
           <Icon name="diamond" className="text-2xl text-secondary" />
-          <span className="text-headline-sm tracking-tight text-primary">davetly</span>
+          <span className="text-headline-sm tracking-tight text-primary">{SITE_NAME}</span>
         </Link>
 
         <SearchPill filters={filters} onChange={onChange} className="hidden md:flex" />

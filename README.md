@@ -69,7 +69,11 @@ Harita karoları geliştirmede doğrudan OpenStreetMap'ten gelir. OSM'in [kullan
 docker build --build-arg VITE_API_URL=https://api.mutlugunum.com -t mutlugunum-web .
 ```
 
-Coolify'da bu değer **Build Variable** olarak girilir. Adım adım kurulum backend reposundaki `docs/yayin-coolify.md` dosyasında.
+Coolify'da bu değer **Build Variable** olarak girilir. nginx de bu adresi kullanır: `/sitemap.xml` API'den gelir, `/robots.txt` onu gösterir, WhatsApp/Instagram gibi bağlantı önizlemesi yapan botlar mekan sayfasında API'nin hazırladığı önizleme sayfasını alır (API'ye ulaşılamazsa normal sayfayı). API adresi istek anında Docker'ın iç DNS'iyle (`127.0.0.11`) çözülür.
+
+## Arama motorları
+
+Her sayfa başlığını, açıklamasını ve asıl adresini (canonical) `useSeo` ile yazar (`src/lib/seo.ts`); mekan sayfaları ayrıca schema.org `EventVenue` bilgisi ekler. Panel, yönetim, giriş ve şifre sayfaları `noindex`'tir. Mekan başlığı ve açıklaması backend'deki `SeoText` ile aynı biçimde üretilir; birini değiştirirseniz öbürünü de değiştirin. Adım adım kurulum backend reposundaki `docs/yayin-coolify.md` dosyasında.
 
 ## Güvenlik
 

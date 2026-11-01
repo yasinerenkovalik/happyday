@@ -9,6 +9,7 @@ import { SiteHeader } from '../explore/SiteHeader'
 import { useExploreFilters } from '../explore/useExploreFilters'
 import { VenueCard, VenueCardSkeleton } from '../explore/VenueCard'
 import { formatNumber } from '../lib/format'
+import { DEFAULT_TITLE, SITE_NAME, siteJsonLd, useSeo } from '../lib/seo'
 
 // Leaflet büyük; harita ayrı parça olarak sonradan yüklenir
 const VenueMap = lazy(() => import('../explore/VenueMap').then((m) => ({ default: m.VenueMap })))
@@ -28,6 +29,16 @@ export function ExplorePage() {
   const categoryName = filters.categoryId ? categoryNames.get(filters.categoryId) : undefined
   const venues = search.data?.items ?? []
   const total = search.data?.totalCount ?? 0
+
+  // Filtreli görünümler ayrı sayfa sayılmaz (canonical ana sayfa); başlık yalnızca ziyaretçiye ne seçtiğini söyler
+  const filtered = cityName || categoryName
+  useSeo({
+    title: filtered
+      ? `${[categoryName, `${cityName ?? 'Türkiye'} Düğün ve Davet Mekanları`].filter(Boolean).join(' — ')} | ${SITE_NAME}`
+      : DEFAULT_TITLE,
+    path: '/',
+    jsonLd: siteJsonLd(),
+  })
 
   const goToPage = (page: number) => {
     update({ page })

@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { Icon } from '../components/Icon'
+import { SITE_NAME } from '../lib/seo'
 
 const YEAR = new Date().getFullYear()
 
@@ -10,7 +11,7 @@ export function SiteFooter() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Icon name="diamond" className="text-xl text-secondary" />
-            <span className="text-headline-sm tracking-tight text-primary">davetly</span>
+            <span className="text-headline-sm tracking-tight text-primary">{SITE_NAME}</span>
           </div>
           <p className="text-body-sm text-on-surface-variant">Düğün, nişan ve davetler için mekanları tek yerde karşılaştırın.</p>
         </div>
@@ -20,7 +21,7 @@ export function SiteFooter() {
             <Link to="/giris" className="font-semibold text-primary hover:underline">Mekanını Listele</Link>
             <Link to="/giris" className="text-on-surface-variant hover:text-on-surface hover:underline">Firma Girişi</Link>
           </div>
-          <p className="text-on-surface-variant">© {YEAR} Davetly</p>
+          <p className="text-on-surface-variant">© {YEAR} {SITE_NAME}</p>
         </div>
       </div>
     </footer>

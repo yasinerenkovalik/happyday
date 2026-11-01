@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useCategories, useVenue, useVenuePackages } from '../api/queries'
 import { RemoveVenueDialog } from '../admin/RemoveVenueDialog'
@@ -8,7 +8,9 @@ import { SiteFooter } from '../explore/SiteFooter'
 import { SiteHeader } from '../explore/SiteHeader'
 import { categoryIcon } from '../explore/categoryIcons'
 import { toSearchParams } from '../explore/useExploreFilters'
+import { uploadUrl } from '../lib/api'
 import { formatNumber } from '../lib/format'
+import { absoluteUrl, SITE_NAME, useSeo, venueDescription, venueJsonLd, venueTitle } from '../lib/seo'
 import { Gallery } from '../venue/Gallery'
 import { InquiryForm } from '../venue/InquiryForm'
 import { PackageCards } from '../venue/PackageCards'
@@ -29,9 +31,21 @@ export function VenueDetailPage() {
   const v = venue.data
   const category = categories.data?.find((c) => c.id === v?.categoryId)
 
-  useEffect(() => {
-    if (v) document.title = `${v.title} — Davetly`
-  }, [v])
+  const photos = v ? [v.coverPhotoPath, ...v.images.map((i) => i.imageUrl)].filter(unique) : []
+  const photoUrls = photos.map((p) => uploadUrl(p)).filter((u): u is string => !!u)
+  useSeo(
+    v
+      ? {
+          title: venueTitle(v),
+          description: venueDescription(v, category?.name),
+          path: `/mekan/${v.id}`,
+          image: photoUrls[0] && absoluteUrl(photoUrls[0]),
+          jsonLd: venueJsonLd(v, photoUrls),
+        }
+      : venue.error
+        ? { title: `Mekan bulunamadı | ${SITE_NAME}`, noindex: true }
+        : null,
+  )
 
   const scrollToForm = () => document.getElementById('teklif')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   const selectPackage = (packageId: string) => {
@@ -105,7 +119,7 @@ export function VenueDetailPage() {
               </div>
             </div>
 
-            <Gallery title={v.title} images={[v.coverPhotoPath, ...v.images.map((i) => i.imageUrl)].filter(unique)} />
+            <Gallery title={v.title} images={photos} />
 
             <div className="grid grid-cols-1 items-start gap-6 pt-4 lg:grid-cols-12 lg:gap-10">
               <div className="space-y-10 lg:col-span-8">
