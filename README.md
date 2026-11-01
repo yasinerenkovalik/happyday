@@ -4,7 +4,7 @@ Davetly ziyaretçi sitesi ve firma paneli. Vite, React 19, TypeScript, React Rou
 
 ## Çalıştırma
 
-Önce backend'in (`HappyDayBackEnd`) `http://localhost:5050` adresinde çalışıyor olması gerekir. Kurulumu için backend README'sine bakın.
+Önce backend'in ([happydayback](https://github.com/yasinerenkovalik/happydayback)) `http://localhost:5050` adresinde çalışıyor olması gerekir. Kurulumu için backend README'sine bakın.
 
 ```bash
 npm install
