@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useEventTypes } from '../api/queries'
 import { Icon } from '../components/Icon'
 import { Popover, PopoverOption } from '../components/Popover'
 import { formatPrice } from '../lib/format'
@@ -19,10 +20,33 @@ type Props = {
 }
 
 export function FilterBar({ filters, onChange, onClear, activeCount, view, onViewChange }: Props) {
+  const eventTypes = useEventTypes()
+  const eventName = eventTypes.data?.find((e) => e.slug === filters.eventType)?.name
+
   return (
     <section className="w-full bg-surface-bright/95 px-5 py-2 shadow-sm backdrop-blur-md lg:px-12">
       <div className="mx-auto flex max-w-[1720px] items-center justify-between gap-4">
         <div className="no-scrollbar flex items-center gap-1.5 overflow-x-auto py-1">
+          <Popover
+            trigger={({ toggle }) => (
+              <FilterPill active={filters.eventType !== undefined} onClick={toggle}>
+                {eventName ?? 'Etkinlik'}
+              </FilterPill>
+            )}
+          >
+            {(close) => (
+              <>
+                <PopoverOption selected={!filters.eventType} onSelect={() => { onChange({ eventType: undefined }); close() }}>
+                  Hepsi
+                </PopoverOption>
+                {eventTypes.data?.map((e) => (
+                  <PopoverOption key={e.id} selected={filters.eventType === e.slug} onSelect={() => { onChange({ eventType: e.slug }); close() }}>
+                    {e.name}
+                  </PopoverOption>
+                ))}
+              </>
+            )}
+          </Popover>
           <Popover
             trigger={({ toggle }) => (
               <FilterPill active={filters.maxPrice !== undefined} onClick={toggle}>

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
-import { useCategories, useVenue, useVenuePackages } from '../api/queries'
+import { useCategories, useEventTypes, useVenue, useVenuePackages } from '../api/queries'
 import { RemoveVenueDialog } from '../admin/RemoveVenueDialog'
 import { useAuth } from '../auth/useAuth'
 import { Icon } from '../components/Icon'
@@ -24,20 +24,24 @@ export function VenueDetailPage() {
   const venue = useVenue(id)
   const packages = useVenuePackages(id)
   const categories = useCategories()
+  const eventTypes = useEventTypes()
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null)
   const { session } = useAuth()
   const [removing, setRemoving] = useState(false)
 
   const v = venue.data
   const category = categories.data?.find((c) => c.id === v?.categoryId)
+  // Sitedeki sırayla; useEventTypes yüklenmeden boş kalır, başlık yüklenince güncellenir
+  const venueEvents = eventTypes.data?.filter((e) => v?.eventTypeIds?.includes(e.id)) ?? []
+  const eventNames = venueEvents.map((e) => e.name)
 
   const photos = v ? [v.coverPhotoPath, ...v.images.map((i) => i.imageUrl)].filter(unique) : []
   const photoUrls = photos.map((p) => uploadUrl(p)).filter((u): u is string => !!u)
   useSeo(
     v
       ? {
-          title: venueTitle(v),
-          description: venueDescription(v, category?.name),
+          title: venueTitle(v, eventNames),
+          description: venueDescription(v, category?.name, eventNames),
           path: `/mekan/${v.id}`,
           image: photoUrls[0] && absoluteUrl(photoUrls[0]),
           jsonLd: venueJsonLd(v, photoUrls),
@@ -117,6 +121,17 @@ export function VenueDetailPage() {
                   {v.districtName}, {v.cityName}
                 </span>
               </div>
+              {venueEvents.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 text-label-sm">
+                  <span className="mr-1 text-on-surface-variant">Uygun olduğu etkinlikler:</span>
+                  {venueEvents.map((e) => (
+                    <Link key={e.id} to={`/?${toSearchParams({ eventType: e.slug, cityId: v.cityId })}`}
+                      className="rounded-full bg-surface-container-high px-3 py-1 text-on-surface transition-colors hover:bg-primary hover:text-on-primary">
+                      {e.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             <Gallery title={v.title} images={photos} />

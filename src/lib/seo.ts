@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { CONTACT } from './contact'
 import type { VenueDetail } from './types'
 
 /**
@@ -43,15 +44,21 @@ export function truncate(text: string, max: number) {
   return (space > max / 2 ? cut.slice(0, space) : cut).replace(/[ ,.·]+$/, '') + '…'
 }
 
-/** "Urla Bağ Evi — Urla, İzmir | Mutlu Günüm" */
-export const venueTitle = (v: Pick<VenueDetail, 'title' | 'districtName' | 'cityName'>) =>
-  `${v.title} — ${place(v.districtName, v.cityName)} | ${SITE_NAME}`
+/**
+ * "Urla Bağ Evi — Urla, İzmir Düğün Mekanı | Mutlu Günüm": aramada eşleşsin diye ilk etkinlik başlıkta.
+ * eventNames sitedeki sırayla (useEventTypes); mekan etkinlik seçmediyse "Urla Bağ Evi — Urla, İzmir | Mutlu Günüm".
+ */
+export function venueTitle(v: Pick<VenueDetail, 'title' | 'districtName' | 'cityName'>, eventNames: string[]) {
+  const where = place(v.districtName, v.cityName)
+  return eventNames.length > 0 ? `${v.title} — ${where} ${eventNames[0]} Mekanı | ${SITE_NAME}` : `${v.title} — ${where} | ${SITE_NAME}`
+}
 
-/** "Urla, İzmir · Kır Bahçesi · 300 kişiye kadar · 72.000 ₺. Bağların arasında…" (en fazla 160 karakter) */
-export function venueDescription(v: VenueDetail, categoryName: string | undefined) {
+/** "Urla, İzmir · Kır Bahçesi · Düğün, Nişan, Kına Gecesi · 300 kişiye kadar · 72.000 ₺. Bağların…" (en fazla 160 karakter) */
+export function venueDescription(v: VenueDetail, categoryName: string | undefined, eventNames: string[]) {
   const facts = [
     place(v.districtName, v.cityName),
     categoryName,
+    eventNames.length > 0 ? eventNames.slice(0, 3).join(', ') : null,
     v.maxGuestCount > 0 ? `${number.format(v.maxGuestCount)} kişiye kadar` : null,
     v.price > 0 ? `${number.format(v.price)} ₺` : null,
   ].filter(Boolean).join(' · ')
@@ -67,7 +74,22 @@ export const siteJsonLd = () => ({
   '@context': 'https://schema.org',
   '@graph': [
     { '@type': 'WebSite', name: SITE_NAME, alternateName: window.location.hostname, url: absoluteUrl('/') },
-    { '@type': 'Organization', name: SITE_NAME, url: absoluteUrl('/'), logo: absoluteUrl('/favicon.svg') },
+    {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+      logo: absoluteUrl('/favicon.svg'),
+      email: CONTACT.email,
+      telephone: CONTACT.phoneIntl,
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        telephone: CONTACT.phoneIntl,
+        email: CONTACT.email,
+        areaServed: 'TR',
+        availableLanguage: 'Turkish',
+      },
+    },
   ],
 })
 

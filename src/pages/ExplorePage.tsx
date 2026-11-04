@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo, useState } from 'react'
-import { useCategories, useCities, useVenueSearch } from '../api/queries'
+import { useCategories, useCities, useEventTypes, useVenueSearch } from '../api/queries'
 import { Icon } from '../components/Icon'
 import { Popover, PopoverOption } from '../components/Popover'
 import { FilterBar, type ViewMode } from '../explore/FilterBar'
@@ -19,6 +19,7 @@ export function ExplorePage() {
   const search = useVenueSearch(filters)
   const cities = useCities()
   const categories = useCategories()
+  const eventTypes = useEventTypes()
 
   const [view, setView] = useState<ViewMode>('split')
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -27,15 +28,16 @@ export function ExplorePage() {
   const categoryNames = useMemo(() => new Map(categories.data?.map((c) => [c.id, c.name])), [categories.data])
   const cityName = cities.data?.find((c) => c.id === filters.cityId)?.cityName
   const categoryName = filters.categoryId ? categoryNames.get(filters.categoryId) : undefined
+  const eventName = eventTypes.data?.find((e) => e.slug === filters.eventType)?.name
+  // "İzmir Genelinde Nişan Mekanları"; etkinlik seçilmediyse "... Düğün & Davet Mekanları"
+  const heading = `${cityName ?? 'Türkiye'} Genelinde ${eventName ? `${eventName} Mekanları` : 'Düğün & Davet Mekanları'}`
   const venues = search.data?.items ?? []
   const total = search.data?.totalCount ?? 0
 
   // Filtreli görünümler ayrı sayfa sayılmaz (canonical ana sayfa); başlık yalnızca ziyaretçiye ne seçtiğini söyler
-  const filtered = cityName || categoryName
+  const filtered = cityName || categoryName || eventName
   useSeo({
-    title: filtered
-      ? `${[categoryName, `${cityName ?? 'Türkiye'} Düğün ve Davet Mekanları`].filter(Boolean).join(' — ')} | ${SITE_NAME}`
-      : DEFAULT_TITLE,
+    title: filtered ? `${[categoryName, heading.replace('&', 've')].filter(Boolean).join(' — ')} | ${SITE_NAME}` : DEFAULT_TITLE,
     path: '/',
     jsonLd: siteJsonLd(),
   })
@@ -57,7 +59,7 @@ export function ExplorePage() {
       <FilterBar
         filters={filters}
         onChange={update}
-        onClear={() => update({ minCapacity: undefined, maxPrice: undefined, isOutdoor: undefined })}
+        onClear={() => update({ eventType: undefined, minCapacity: undefined, maxPrice: undefined, isOutdoor: undefined })}
         activeCount={activeCount}
         view={view}
         onViewChange={setView}
@@ -74,7 +76,7 @@ export function ExplorePage() {
                     <span className="text-label-sm tracking-widest text-secondary uppercase">{categoryName ?? 'Tüm mekanlar'}</span>
                   </div>
                   <h1 className="font-display text-headline-md text-primary">
-                    {cityName ?? 'Türkiye'} Genelinde Düğün &amp; Davet Mekanları
+                    {heading}
                   </h1>
                   <p className="mt-0.5 text-body-sm text-on-surface-variant">
                     {search.isPending ? 'Mekanlar yükleniyor…' : `${formatNumber(total)} mekan listeleniyor`}

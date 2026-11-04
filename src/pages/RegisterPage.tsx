@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router'
 import { useRegisterCompany, type RegisterForm } from '../api/account'
 import { useAuth } from '../auth/useAuth'
 import { AuthLayout } from '../components/AuthLayout'
+import { ContactLinks } from '../components/ContactLinks'
 import { ResendVerification } from '../components/ResendVerification'
 import { PASSWORD_HINT, passwordProblem } from '../lib/password'
 import { CoverInput } from '../panel/ImageInputs'
@@ -76,6 +77,10 @@ export function RegisterPage() {
       description={<>Mekanlarınızı Mutlu Günüm'de listeleyin. E-postanızı doğruladıktan sonra mekan ekleyebilirsiniz; mekanlarınız ekibimizin onayından sonra sitede görünür. Zaten hesabınız var mı? <Link to="/giris" className="text-secondary hover:underline">Giriş yapın</Link></>}
     >
       <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="rounded-xl bg-surface-container-high px-4 py-3 text-body-sm text-on-surface">
+          <p className="mb-1.5">Kayıt olurken yardım mı lazım, ya da önce bilgi mi almak istersiniz? Bize ulaşın:</p>
+          <ContactLinks className="font-semibold" />
+        </div>
         <Section title="Hesap">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Field label="Firma adı" required>

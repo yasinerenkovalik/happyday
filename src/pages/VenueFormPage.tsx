@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { useCompany, useDeleteVenue, useManagedVenue, useCreateVenue, useUpdateVenue, type VenueForm } from '../api/panel'
-import { useCategories } from '../api/queries'
+import { useCategories, useEventTypes } from '../api/queries'
 import { useCompanySession } from '../auth/useAuth'
 import { Icon } from '../components/Icon'
 import type { Company, VenueDetail } from '../lib/types'
@@ -54,6 +54,7 @@ function initialDraft(v?: VenueDetail, company?: Company): Draft {
     duration: v?.duration ?? '',
     isOutdoor: v?.isOutdoor ?? false,
     services: v?.services ?? [],
+    eventTypeIds: v?.eventTypeIds ?? [],
     reservationNote: v?.reservationNote ?? '',
     cancelPolicy: v?.cancelPolicy ?? '',
     videoUrl: v?.videoUrl ?? '',
@@ -66,6 +67,7 @@ function VenueEditor({ venue, company }: { venue?: VenueDetail; company?: Compan
   const navigate = useNavigate()
   const location = useLocation()
   const categories = useCategories()
+  const eventTypes = useEventTypes()
   const create = useCreateVenue(companyId)
   const update = useUpdateVenue(companyId, venue?.id ?? '')
   const remove = useDeleteVenue(companyId)
@@ -85,7 +87,9 @@ function VenueEditor({ venue, company }: { venue?: VenueDetail; company?: Compan
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    const problem = hasMapPoint(draft) ? null : 'Haritada mekanın konumunu seçin.'
+    const problem = draft.eventTypeIds.length === 0
+      ? 'Mekanın uygun olduğu en az bir etkinlik seçin.'
+      : hasMapPoint(draft) ? null : 'Haritada mekanın konumunu seçin.'
     setFormError(problem)
     if (problem) return
     const form: VenueForm = {
@@ -156,6 +160,24 @@ function VenueEditor({ venue, company }: { venue?: VenueDetail; company?: Compan
           <Field label="Açıklama" required hint="Paragrafları boş bir satırla ayırın. Sitede ilk paragraf görünür, kalanı “Devamını oku” ile açılır.">
             <textarea required rows={6} value={draft.description} onChange={(e) => set('description', e.target.value)} className={`${inputClass} resize-y`} />
           </Field>
+        </Section>
+
+        <Section title="Uygun olduğu etkinlikler" description="Ziyaretçiler mekanları bu etkinliklere göre arar; uygun olduğu hepsini seçin. En az bir tane gerekli.">
+          <div className="flex flex-wrap gap-2">
+            {eventTypes.data?.map((e) => {
+              const on = draft.eventTypeIds.includes(e.id)
+              return (
+                <button key={e.id} type="button" aria-pressed={on}
+                  onClick={() => set('eventTypeIds', on ? draft.eventTypeIds.filter((id) => id !== e.id) : [...draft.eventTypeIds, e.id])}
+                  className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-label-md transition-colors ${
+                    on ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'
+                  }`}>
+                  {on && <Icon name="check" className="text-base" />}
+                  {e.name}
+                </button>
+              )
+            })}
+          </div>
         </Section>
 
         <Section title="Kapasite, fiyat ve alan">

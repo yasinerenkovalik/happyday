@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { ContactLinks } from '../components/ContactLinks'
 import { Icon } from '../components/Icon'
 import { SITE_NAME } from '../lib/seo'
 
@@ -14,11 +15,15 @@ export function SiteFooter() {
             <span className="text-headline-sm tracking-tight text-primary">{SITE_NAME}</span>
           </div>
           <p className="text-body-sm text-on-surface-variant">Düğün, nişan ve davetler için mekanları tek yerde karşılaştırın.</p>
+          <div className="pt-3 text-body-sm text-on-surface-variant">
+            <p className="mb-1 font-semibold text-on-surface">Kayıt ve bilgi için bize ulaşın</p>
+            <ContactLinks />
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 text-body-sm md:items-end">
           <div className="flex gap-6">
-            <Link to="/giris" className="font-semibold text-primary hover:underline">Mekanını Listele</Link>
+            <Link to="/kayit" className="font-semibold text-primary hover:underline">Mekanını Listele</Link>
             <Link to="/giris" className="text-on-surface-variant hover:text-on-surface hover:underline">Firma Girişi</Link>
           </div>
           <p className="text-on-surface-variant">© {YEAR} {SITE_NAME}</p>

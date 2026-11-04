@@ -5,6 +5,7 @@ import type {
   City,
   CompanyVenue,
   ContactMessage,
+  EventType,
   Package,
   PagedResult,
   VenueDetail,
@@ -62,6 +63,14 @@ export function useCategories() {
   })
 }
 
+export function useEventTypes() {
+  return useQuery({
+    queryKey: ['event-types'],
+    queryFn: () => apiData<EventType[]>('/api/event-types'),
+    staleTime: Infinity, // backend'de sabit liste
+  })
+}
+
 export function useCities() {
   return useQuery({
     queryKey: ['cities'],
@@ -73,6 +82,8 @@ export function useCities() {
 export type VenueFilters = {
   cityId?: number
   categoryId?: number
+  /** Etkinlik slug'ı (dugun, nisan...) */
+  eventType?: string
   minCapacity?: number
   maxPrice?: number
   isOutdoor?: boolean
@@ -89,6 +100,7 @@ export function useVenueSearch(filters: VenueFilters) {
       const qs = new URLSearchParams({ Page: String(filters.page), PageSize: String(VENUE_PAGE_SIZE) })
       if (filters.cityId) qs.set('CityId', String(filters.cityId))
       if (filters.categoryId) qs.set('CategoryId', String(filters.categoryId))
+      if (filters.eventType) qs.set('EventType', filters.eventType)
       if (filters.minCapacity) qs.set('MinCapacity', String(filters.minCapacity))
       if (filters.maxPrice) qs.set('MaxPrice', String(filters.maxPrice))
       if (filters.isOutdoor !== undefined) qs.set('IsOutdoor', String(filters.isOutdoor))

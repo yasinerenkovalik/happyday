@@ -74,6 +74,7 @@ export type VenueForm = LocationValue & {
   duration: string
   isOutdoor: boolean
   services: string[]
+  eventTypeIds: number[]
   reservationNote: string
   cancelPolicy: string
   videoUrl: string
@@ -90,6 +91,7 @@ function venueFormData(f: VenueForm) {
   form.set('Duration', f.duration)
   form.set('IsOutdoor', String(f.isOutdoor))
   f.services.forEach((s) => form.append('Services', s))
+  f.eventTypeIds.forEach((id) => form.append('EventTypeIds', String(id)))
   // Boş gönderilen isteğe bağlı alanlar backend'de temizlenir
   form.set('ReservationNote', f.reservationNote)
   form.set('CancelPolicy', f.cancelPolicy)

@@ -58,6 +58,8 @@ export type Package = {
 }
 
 export type Category = { id: number; name: string }
+/** Mekanın uygun olduğu etkinlik (düğün, nişan...); slug adreste kullanılır: ?etkinlik=dugun */
+export type EventType = { id: number; name: string; slug: string }
 /** latitude/longitude: il merkezi */
 export type City = { id: number; cityName: string; latitude: number; longitude: number }
 export type District = { id: number; districtName: string }
@@ -74,6 +76,8 @@ export type VenueDetail = {
   companyAddress: string
   maxGuestCount: number
   services: string[]
+  /** Uygun olduğu etkinlikler; adları useEventTypes'tan */
+  eventTypeIds: number[]
   duration: string
   isOutdoor: boolean
   reservationNote: string | null

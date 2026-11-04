@@ -3,12 +3,13 @@ import { useSearchParams } from 'react-router'
 import type { VenueFilters } from '../api/queries'
 
 // Filtreler adres çubuğunda tutulur: paylaşılabilir link, geri tuşu ve yenileme çalışır.
-// ?sehir=34&kategori=1&kisi=200&fiyat=100000&alan=acik&siralama=fiyat&sayfa=2
+// ?etkinlik=dugun&sehir=34&kategori=1&kisi=200&fiyat=100000&alan=acik&siralama=fiyat&sayfa=2
 export type ExploreFilters = Omit<VenueFilters, 'page'> & { page: number }
 
 /** Filtreleri ana sayfa adresine çevirir; detay sayfasındaki arama da bununla ana sayfaya gider. */
 export function toSearchParams(f: Partial<ExploreFilters>) {
   const qs = new URLSearchParams()
+  if (f.eventType) qs.set('etkinlik', f.eventType)
   if (f.cityId) qs.set('sehir', String(f.cityId))
   if (f.categoryId) qs.set('kategori', String(f.categoryId))
   if (f.minCapacity) qs.set('kisi', String(f.minCapacity))
@@ -30,6 +31,7 @@ export function useExploreFilters() {
   const filters = useMemo<ExploreFilters>(() => {
     const alan = params.get('alan')
     return {
+      eventType: params.get('etkinlik')?.trim().toLowerCase() || undefined,
       cityId: toInt(params.get('sehir')),
       categoryId: toInt(params.get('kategori')),
       minCapacity: toInt(params.get('kisi')),
@@ -50,7 +52,7 @@ export function useExploreFilters() {
 
   const clear = useCallback(() => setParams(new URLSearchParams()), [setParams])
 
-  const activeCount = [filters.minCapacity, filters.maxPrice, filters.isOutdoor].filter((v) => v !== undefined).length
+  const activeCount = [filters.eventType, filters.minCapacity, filters.maxPrice, filters.isOutdoor].filter((v) => v !== undefined).length
 
   return { filters, update, clear, activeCount }
 }
