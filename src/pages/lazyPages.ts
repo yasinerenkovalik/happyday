@@ -8,6 +8,7 @@ export const LoginPage = lazy(() => import('./LoginPage').then((m) => ({ default
 export const RegisterPage = lazy(() => import('./RegisterPage').then((m) => ({ default: m.RegisterPage })))
 export const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage').then((m) => ({ default: m.ForgotPasswordPage })))
 export const ResetPasswordPage = lazy(() => import('./ResetPasswordPage').then((m) => ({ default: m.ResetPasswordPage })))
+export const InvitationOptOutPage = lazy(() => import('./InvitationOptOutPage').then((m) => ({ default: m.InvitationOptOutPage })))
 export const ConfirmEmailPage = lazy(() => import('./ConfirmEmailPage').then((m) => ({ default: m.ConfirmEmailPage })))
 
 // Firma paneli
@@ -22,6 +23,7 @@ export const AdminLoginPage = lazy(() => import('./AdminLoginPage').then((m) => 
 export const AdminLayout = lazy(() => import('./AdminLayout').then((m) => ({ default: m.AdminLayout })))
 export const AdminDashboardPage = lazy(() => import('./AdminDashboardPage').then((m) => ({ default: m.AdminDashboardPage })))
 export const AdminVenuesPage = lazy(() => import('./AdminVenuesPage').then((m) => ({ default: m.AdminVenuesPage })))
+export const AdminInvitationsPage = lazy(() => import('./AdminInvitationsPage').then((m) => ({ default: m.AdminInvitationsPage })))
 export const AdminCompaniesPage = lazy(() => import('./AdminCompaniesPage').then((m) => ({ default: m.AdminCompaniesPage })))
 export const AdminUsersPage = lazy(() => import('./AdminUsersPage').then((m) => ({ default: m.AdminUsersPage })))
 export const AdminMessagesPage = lazy(() => import('./AdminMessagesPage').then((m) => ({ default: m.AdminMessagesPage })))

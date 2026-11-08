@@ -1,7 +1,7 @@
 // Yönetim paneli: yalnızca Admin oturumuyla çalışır (api/admin/*)
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiData, apiMessage } from '../lib/api'
-import type { AdminCompany, AdminDashboard, AdminMessage, AdminUser, AdminVenue } from '../lib/types'
+import type { AdminCompany, AdminDashboard, AdminInvitation, AdminMessage, AdminUser, AdminVenue } from '../lib/types'
 
 export const ADMIN_PAGE_SIZE = 20
 
@@ -64,6 +64,23 @@ export function useSetUserActive() {
       return apiData<unknown>('/api/admin/users/active', { method: 'POST', body: form })
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin'] }),
+  })
+}
+
+export function useAdminInvitations(page: number) {
+  return useQuery({
+    queryKey: ['admin', 'invitations', page],
+    queryFn: () => apiData<AdminInvitation[]>(`/api/admin/invitations?${listQuery({ PageNumber: page })}`),
+    placeholderData: keepPreviousData,
+  })
+}
+
+export function useSendInvitation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (invitation: { email: string; companyName: string | null; subject: string; message: string }) =>
+      apiMessage('/api/admin/invitations/send', { method: 'POST', body: invitation }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'invitations'] }),
   })
 }
 

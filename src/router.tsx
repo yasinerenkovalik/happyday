@@ -4,6 +4,7 @@ import { ExplorePage } from './pages/ExplorePage'
 import {
   AdminCompaniesPage,
   AdminDashboardPage,
+  AdminInvitationsPage,
   AdminLayout,
   AdminLoginPage,
   AdminMessagesPage,
@@ -12,6 +13,7 @@ import {
   CompanyProfilePage,
   ConfirmEmailPage,
   ForgotPasswordPage,
+  InvitationOptOutPage,
   LoginPage,
   MessagesPage,
   PanelLayout,
@@ -31,6 +33,7 @@ export const router = createBrowserRouter([
   // Bu iki adres backend'in gönderdiği e-postalardaki bağlantılarla aynı olmalı (Frontend:BaseUrl)
   { path: '/auth/reset-password', element: <ResetPasswordPage /> },
   { path: '/auth/confirm-email', element: <ConfirmEmailPage /> },
+  { path: '/davet/iptal', element: <InvitationOptOutPage /> },
   {
     path: '/panel',
     element: (
@@ -57,6 +60,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <AdminDashboardPage /> },
       { path: 'firmalar', element: <AdminCompaniesPage /> },
+      { path: 'davetler', element: <AdminInvitationsPage /> },
       { path: 'mekanlar', element: <AdminVenuesPage /> },
       { path: 'kullanicilar', element: <AdminUsersPage /> },
       { path: 'mesajlar', element: <AdminMessagesPage /> },

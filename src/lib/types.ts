@@ -171,6 +171,17 @@ export type AdminUser = {
   companyName: string | null
 }
 
+export type AdminInvitation = {
+  id: string
+  email: string
+  companyName: string | null
+  sentAt: string
+  /** Bu adresle firma kaydı açıldıysa */
+  registeredAt: string | null
+  /** "Almak istemiyorum" dediyse */
+  optedOutAt: string | null
+}
+
 export type AdminMessage = {
   id: string
   fullName: string

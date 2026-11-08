@@ -33,6 +33,13 @@ export function useRegisterCompany() {
   })
 }
 
+/** Davet e-postasındaki "almak istemiyorum" bağlantısı */
+export function useInvitationOptOut() {
+  return useMutation({
+    mutationFn: (token: string) => apiMessage('/api/invitations/opt-out', { method: 'POST', body: { token } }),
+  })
+}
+
 /** E-postadaki bağlantı açılınca bir kez çalışır (StrictMode'da iki kez istek atmasın diye sorgu olarak) */
 export function useConfirmEmail(companyId: string | null, token: string | null) {
   const queryClient = useQueryClient()
